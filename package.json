@@ -1,0 +1,36 @@
+{
+  "name": "ebaybotcustomresolvers",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:clear": "rimraf dist",
+    "build": "npm run build:clear && tsc -p .",
+    "start": "node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@m10185/mvp-interfaces": "^1.0.1",
+    "@m10185/mvp-logger": "^1.0.3",
+    "@m10185/rabbit_rpc": "^1.0.7",
+    "@mmo.delivery/mmo-interfaces-other": "^0.0.20",
+    "@apollo/client": "^3.7.17",
+    "amqplib": "^0.10.3",
+    "apollo-server": "^3.10.2",
+    "axios": "^1.2.2",
+    "cross-fetch": "^4.0.0",
+    "dotenv": "^16.0.2",
+    "generate-password": "^1.7.0",
+    "jwt-encode": "^1.0.1",
+    "node-fetch": "^3.3.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.8.3"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.8.2",
+    "@types/jwt-encode": "^1.0.0"
+  }
+}
