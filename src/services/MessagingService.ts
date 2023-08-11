@@ -9,6 +9,7 @@ import {
   StopData,
 } from '@m10185/mvp-interfaces';
 import { RequestMsg } from '../interfaces/Message';
+import ResponseMsg from '../interfaces/ErrorResponse';
 
 dotenv.config();
 
@@ -31,8 +32,8 @@ export class MessagingService {
     }
 
     this.rpc_client = new RabbitRPCClient(
-      { amq_uri: rabbitUrl, rpc_queue: '', prefetch: 1 },
-      { logger: new ConcoleLogger('RabbitRPCClient'), timeout: 12 * 1000 }
+      { amq_uri: rabbitUrl, rpc_queue: 'EBAY_DIALOG', prefetch: 1 },
+      { logger: new ConcoleLogger('RabbitRPCClient'), timeout: 15 * 1000 }
     );
     await this.rpc_client.start();
   }
@@ -40,7 +41,7 @@ export class MessagingService {
   async sendMessage(
     message: string,
     conversationUrl: string
-  ): Promise<ResponceMessage> {
+  ): Promise<ResponseMsg> {
     this.logger.log('sendMessage');
     const payload: RequestMsg = {
       message,
@@ -51,61 +52,17 @@ export class MessagingService {
     return result;
   }
 
-  async run_app(
-    name: string,
-    profile_email: string,
-    args: any
-  ): Promise<ResponceMessage> {
-    this.logger.log('run_app');
-    const payload: RunData = {
-      name,
-      profile_email,
-      args,
-    };
-
-    const msg: RequestMessage = {
-      command: EComandType.RUN_APP,
-      payload,
-    };
-
-    const result = await this.request_msg_mgr_q(msg);
-    return result;
-  }
-
-  async stop_app(
-    name: string,
-    profile_email: string
-  ): Promise<ResponceMessage> {
-    this.logger.log('kill_by_profile');
-
-    const payload: StopData = {
-      profile_email,
-      name,
-    };
-
-    const msg: RequestMessage = {
-      command: EComandType.STOP_APP,
-      payload: {
-        profile_email,
-      } as StopData,
-    };
-    const result = await this.request_msg_mgr_q(msg);
-
-    return result;
-  }
-
   private async request_msg_mgr_q(obj: any): Promise<any> {
     const str_msg = JSON.stringify(obj);
     try {
       console.log(str_msg);
-      console.log(this.worker_mgr_queue);
-      // const server_resp = await this.rpc_client.request_msg(
-      //   str_msg,
-      //   this.worker_mgr_queue
-      // );
+      const server_resp = await this.rpc_client.request_msg(
+        str_msg,
+        this.worker_mgr_queue
+      );
 
-      // const result = JSON.parse(server_resp);
-      const result = 'success';
+      const result = JSON.parse(server_resp);
+      // const result = 'success';
 
       this.logger.log('result');
       this.logger.log(JSON.stringify(result));

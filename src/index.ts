@@ -11,8 +11,13 @@ const typeDefs = gql`
     text: String
   }
 
+  type ResponseMsg {
+    success: Boolean
+    errorMsg: String
+  }
+
   type Mutation {
-    sendMessage(payload: messageRequest): String!
+    sendMessage(payload: messageRequest): ResponseMsg!
   }
 
   type Query {
@@ -28,6 +33,8 @@ const resolvers = {
           args.payload.text,
           args.payload.url
         );
+
+        return response;
       } catch (err) {
         console.log(err);
         return 'error';
