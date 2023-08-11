@@ -33,7 +33,7 @@ export class MessagingService {
 
     this.rpc_client = new RabbitRPCClient(
       { amq_uri: rabbitUrl, rpc_queue: 'EBAY_DIALOG', prefetch: 1 },
-      { logger: new ConcoleLogger('RabbitRPCClient'), timeout: 15 * 1000 }
+      { logger: new ConcoleLogger('RabbitRPCClient'), timeout: 30 * 1000 }
     );
     await this.rpc_client.start();
   }

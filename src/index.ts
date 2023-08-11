@@ -12,7 +12,8 @@ const typeDefs = gql`
   }
 
   type ResponseMsg {
-    success: Boolean
+    send_success: Boolean
+    update_success: Boolean
     errorMsg: String
   }
 

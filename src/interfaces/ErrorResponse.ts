@@ -1,4 +1,5 @@
 export default interface ResponseMsg {
-  success: boolean;
+  send_success: boolean;
+  update_success: boolean;
   errorMsg?: string;
 }
