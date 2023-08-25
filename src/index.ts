@@ -1,20 +1,19 @@
 import { ApolloServer, gql } from 'apollo-server';
 import dotenv from 'dotenv';
-import { MessagingService } from './services/MessagingService';
+// import { MessagingService } from './services/MessagingService';
+import { sendMessageRequest } from './services/Requests';
 
 dotenv.config();
-const messagingService = new MessagingService();
+// const messagingService = new MessagingService();
 
 const typeDefs = gql`
   input messageRequest {
-    url: String
+    adId: String
     text: String
   }
 
   type ResponseMsg {
-    send_success: Boolean
-    update_success: Boolean
-    errorMsg: String
+    error: String
   }
 
   type Mutation {
@@ -30,10 +29,15 @@ const resolvers = {
   Mutation: {
     sendMessage: async (parent: any, args: any, context: any, info: any) => {
       try {
-        const response = await messagingService.sendMessage(
-          args.payload.text,
-          args.payload.url
-        );
+        // const response = await messagingService.sendMessage(
+        //   args.payload.text,
+        //   args.payload.url
+        // );
+        const messageToSend = {
+          message: args.payload.text,
+          adId: args.payload.adId,
+        };
+        const response = await sendMessageRequest(messageToSend);
 
         return response;
       } catch (err) {
@@ -50,7 +54,7 @@ const resolvers = {
 };
 
 async function run() {
-  await messagingService.start();
+  // await messagingService.start();
 
   const server = new ApolloServer({
     cors: { allowedHeaders: '*' },
