@@ -8,7 +8,7 @@ const messagingService = new MessagingService();
 
 const typeDefs = gql`
   input messageRequest {
-    adId: String
+    url: String
     text: String
   }
 
