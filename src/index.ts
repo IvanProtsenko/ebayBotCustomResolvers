@@ -13,7 +13,9 @@ const typeDefs = gql`
   }
 
   type ResponseMsg {
-    error: String
+    send_success: Boolean
+    update_success: Boolean
+    errorMsg: String
   }
 
   type Mutation {
