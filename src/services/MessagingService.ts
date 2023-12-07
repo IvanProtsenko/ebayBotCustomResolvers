@@ -10,6 +10,7 @@ import {
 } from '@m10185/mvp-interfaces';
 import { RequestMsg } from '../interfaces/Message';
 import ResponseMsg from '../interfaces/ErrorResponse';
+import { sleep } from './utils';
 
 dotenv.config();
 
@@ -22,9 +23,6 @@ export class MessagingService {
 
   constructor() {
     this.logger = new ConcoleLogger('WBB-Client');
-  }
-
-  public async start() {
     const rabbitUrl: string | undefined = process.env.RABBITMQ_URL;
 
     if (!rabbitUrl) {
@@ -35,7 +33,31 @@ export class MessagingService {
       { amq_uri: rabbitUrl, rpc_queue: 'EBAY_DIALOG', prefetch: 1 },
       { logger: new ConcoleLogger('RabbitRPCClient'), timeout: 90 * 1000 }
     );
-    await this.rpc_client.start();
+  }
+
+  public async startUnkillable() {
+    try {
+      // this.logger.debug('Try create connection');
+      await this.rpc_client.start();
+
+      this.rpc_client.connectionOnError(async (err: any) => {
+        const { message, stack } = err;
+        // this.logger.debug('Connection error event catched', { meta: { message, stack } });
+      });
+
+      this.rpc_client.connectionOnClose(async () => {
+        this.logger.warn('Connection close event catched. Sleep 10 sec & reconnect');
+        await sleep(10000);
+        await this.startUnkillable();
+      });
+
+      // this.logger.debug('Connection created successfully');
+    } catch (error: any) {
+      const { message, stack } = error;
+      // this.logger.warn('Error catched. Sleep 20 sec & reconnect', { meta: { message, stack } });
+      await sleep(20000);
+      await this.startUnkillable();
+    }
   }
 
   async sendMessage(

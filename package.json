@@ -13,11 +13,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@apollo/client": "^3.7.17",
     "@m10185/mvp-interfaces": "^1.0.1",
     "@m10185/mvp-logger": "^1.0.3",
-    "@m10185/rabbit_rpc": "^1.0.7",
+    "@m10185/rabbit_rpc": "^1.2.1",
     "@mmo.delivery/mmo-interfaces-other": "^0.0.20",
-    "@apollo/client": "^3.7.17",
     "amqplib": "^0.10.3",
     "apollo-server": "^3.10.2",
     "axios": "^1.2.2",

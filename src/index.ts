@@ -56,7 +56,7 @@ const resolvers = {
 };
 
 async function run() {
-  await messagingService.start();
+  await messagingService.startUnkillable();
 
   const server = new ApolloServer({
     cors: { allowedHeaders: '*' },
